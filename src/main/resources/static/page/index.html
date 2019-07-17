@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+  <title>主页</title>
+  <style type="text/css">
+  		th {
+            text-align: left;
+            padding: .5em .5em;
+            font-weight: bold;
+            background: #66677c;color: #fff;
+        }
+        tr td { border:1px solid #0094ff; }
+        
+        .skin {
+			width : 100px;
+			padding : 2px;
+			visibility : hidden;
+			position : absolute;
+		}
+
+  </style>
+</head>
+<body>
+  <div align="center" style="background: #66677c;color: #fff;">SXDB</div>
+  <div align="center" style="width: 100%">
+  	<table>
+  		<thead>
+	   		<tr>
+	   		   <td>
+	   		   	 DB：<input class="changeDiv" type="text" id="textDbSelect" list="dbListForSelect" onchange="gradeChange()"/>
+	                <datalist id="dbListForSelect">
+	                 </datalist>
+	   		   </td>
+	   		   <td>
+	   		   	 表名：<input class="changeDiv" type="text" id="textTableSelect" list="dataListForSelect" onchange="gradeTableChange()"/>
+	                <datalist id="dataListForSelect">
+	                 </datalist>
+	   		   </td>
+	   		   <td><input type="button" onclick="searchTable(1,10)" value="查询"></input></td>
+	   		   <td><input type="button" onclick="searchTable('-1',10)" value="升序"></input></td>
+	   		   <td><input type="button" onclick="searchTable('-2',10)" value="降序"></input></td>
+	   		   <td>
+	   		   	 排序：<input class="changeDiv" type="text" id="textSortSelect" list="dataSortListForSelect" size="10"/>
+	                <datalist id="dataSortListForSelect">
+	                 </datalist>
+	   		   </td>
+	   		</tr>
+	   		<tr>
+	   			<td colspan="6"><textarea id="condition" rows="10" cols="100"></textarea></td>
+	   		</tr>
+	   	</thead>
+  	</table>
+   	<table style="width: 100%">
+	   	<thead  id="tb">
+	   		<tr id="paramValue"></tr>
+   		</thead>
+   		<tbody id="paramData">
+   		</tbody>
+   	</table>
+   	<div id="fenye" style="display: none;">
+   		<tr>
+   			<td><input type="button" value="首页" onclick="page(1)"/></td>
+   			<td><input type="button" value="上一页" onclick="page(2)"/></td>
+   			<td>第<span id="pageNum"></span>页</td>
+   			<td><input type="button" value="下一页" onclick="page(3)"/></td>
+   			<td><input type="button" value="尾页" onclick="page(4)"/></td>
+   			<td><input id="tz" type="text" value=""/></td>
+   			<td><input type="button" value="跳转" onclick="page(5)"/></td>
+   			<td>总页数:<span id="total"></span></td>
+   			<td>条数:<input class="changeDiv" size="2" type="text" value="10" id="textNumSelect" list="dataNumListForSelect" />
+	                <datalist id="dataNumListForSelect">
+	                	<option>10</option>
+	                	<option>20</option>
+	                	<option>50</option>
+	                	<option>100</option>
+	                 </datalist>
+	        </td>
+   		</tr>
+   	</div>
+   <div id="menu" class="skin">
+		<ul>
+		   <li>升序</li>
+		   <li>降序</li>
+	 </ul>
+	</div>
+  </div>
+  <script type="text/javascript" src="../js/jquery/1.9.1/jquery.min.js"></script>
+  <script type="text/javascript">
+  
+  window.onload=function(){}
+  
+  $.get("/queryDbList",function(data,status){
+	  var optionstring="";
+	  $.each(data,function(key,value){
+		  optionstring += "<option value=\"" + value + "\" ></option>";  
+	  })
+	  $("#dbListForSelect").html(optionstring); 
+  });
+  
+  function gradeChange(){
+	  var db = $("#textDbSelect").val();
+	  $.get("/queryTableList/"+db+"",function(data,status){
+		  var optionstring="";  
+		  $.each(data,function(key,value){
+			  optionstring += "<option value=\"" + value + "\" ></option>";  
+		  })
+		  $("#textTableSelect").val("");
+		  $("#dataListForSelect").html(optionstring); 
+	  });
+  }
+  
+  function gradeTableChange(){
+	  var db = $("#textDbSelect").val();
+	  var table = $("#textTableSelect").val();
+	  var valueParam="/queryTableParamList/"+db+"/"+table;
+	  $.get(valueParam, function(data,status){
+		  var paramValue="";
+		  $.each(data,function(key,value){
+			  if(null!=value){
+				  paramValue += "<option value=\"" + value + "\" ></option>";
+			  }
+		  })
+		  $("#dataSortListForSelect").html("");
+		  $("#dataSortListForSelect").html(paramValue);
+	  });
+  }
+  
+  function searchTable(pageNum,pageSize){
+	  var db = $("#textDbSelect").val();
+	  var table = $("#textTableSelect").val();
+	  if('' == db){
+		  alert("db不能为空");
+		  return;
+	  }
+	  if('' == table){
+		  alert("表名不能为空");
+		  return;
+	  }
+	  var valueParam="/queryTableParamList/"+db+"/"+table;
+	  
+	  $.get(valueParam, function(data,status){
+		  var paramValue="";
+		  var optionSortString="";  
+		  $.each(data,function(key,value){
+			  if(null!=value){
+				  paramValue += "<th id='drawing' ondblclick='shuangji("+key+")' oncontextmenu=''>"+value+"</th>";
+				  optionSortString += "<option value=\"" + value + "\" ></option>";
+			  }
+		  })
+		  $("#paramValue").html(paramValue);
+		  $("#dataSortListForSelect").html(optionSortString); 
+	  });
+	  
+	  var param = "/queryTable/"+db+"/"+table+"";
+	  var condition = $("#condition").val();
+	  var sort = $('#textSortSelect').val();
+	  if('' != condition){
+		  param = param + "?condition="+condition+"&pageNum="+pageNum+"&pageSize="+pageSize;
+	  }else{
+		  param = param + "?pageNum="+pageNum+"&pageSize="+pageSize;
+	  }
+	  if('' != sort){
+		  param = param + "&sort="+sort
+	  }
+	  
+	  $.get(param, function(data,status){
+		  var code = data.respCode;
+		  var memo = data.memo;
+		  if(code != '00000'){
+			  alert(memo);
+			  return;
+		  }
+		  var d = data.data;
+		  var pageNum = d.pageNum;
+		  if('0'== pageNum){
+			  pageNum='1';
+		  }
+		  $("#pageNum").html(pageNum);
+		  var pageSize = d.pageSize;
+		  var total = d.total;
+		  $("#total").html(total);
+		  var pdata="";
+		  var dd = d.data;
+		  $.each(dd,function(key,map){
+			  var data="<tr>";
+			  $.each(map,function(key,values){
+				  if(null==values){
+					  data += "<td></td>"; 
+				  }else{
+					  data += "<td>"+values+"</td>"; 
+				  }
+				   
+			  })
+			  data += "<tr>"; 
+			  pdata += data;
+		  })
+		  $("#paramData").empty();
+		  $("#paramData").html(pdata);
+		  if(""!=pdata){
+			 $("#fenye").show(); 
+		  }
+		  if(""==pdata){
+			 $("#fenye").hide(); 
+		  }
+	  });
+  }
+  
+  function shuangji(key){
+	  var tb=document.getElementById ("tb").rows[0]
+	  var cell = tb.cells[key];
+	  cell.style.display = 'none';
+	  console.log(tb);
+	  var row=document.getElementById ("paramData").rows;
+	  console.log(row);
+	  for(var i = 0, len = row.length; i < len; i++){
+	       var cell1 = row[i].cells[key];
+	       console.log(cell1);
+	       if(cell1 != undefined){
+	    	   cell1.style.display = 'none';   
+	       }
+	       
+	  }
+  }
+  
+  function page(num){
+	  var pageNum = $("#pageNum").text();
+	  var pageNo = parseInt(pageNum);
+	  var total = $("#total").text();
+	  var totalNo = parseInt(total);
+	  var textNumSelect = $("#textNumSelect").val();
+	  var textNum = parseInt(textNumSelect);
+	  if(num=='1'){
+		 searchTable(1,textNum);
+	  }else if(num=='2'){
+		 if(pageNo>0){
+			searchTable(pageNo-1,textNum);
+		 } 
+	  }else if(num=='3'){
+		 var t = totalNo/textNum;
+		 t = Math.ceil(t);
+		 var p = pageNo+1;
+		 if(t<=p){
+			 p=t;
+		 }
+		 searchTable(p,textNum);
+	  }else if(num=='4'){
+		 var t = totalNo/textNum;
+		 t = Math.ceil(t);
+		 searchTable(t,textNum);
+	  }else if(num=='5'){
+		 var tz = $("#tz").val();
+		 searchTable(tz,textNum);
+	  }
+  }
+  
+  
+  
+  
+  //alert(GetQueryString("phone"));
+  var phone=GetQueryString("phone");
+  var loginType=GetQueryString("loginType");
+  var channelCode=GetQueryString("channelCode");
+  $('#phone').val(phone);
+  $('#loginType').val(loginType);
+  $('#channelCode').val(channelCode);
+  function GetQueryString(name)
+  {
+       var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+       var r = window.location.search.substr(1).match(reg);
+       if(r!=null)return  unescape(r[2]); return null;
+  }
+  </script>
+</body>
+</html>

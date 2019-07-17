@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans  
+            http://www.springframework.org/schema/beans/spring-beans.xsd">
+	<!-- 数据源 -->
+	<bean id="dataSourceHikari_information_prod" class="com.zaxxer.hikari.HikariDataSource" destroy-method="shutdown">
+		 <property name="jdbcUrl" value="jdbc:mysql://rm-uf64ks9egr7kks9iy.mysql.rds.aliyuncs.com:3306/information_schema?characterEncoding=utf-8&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=Asia/Shanghai" />
+		 <property name="username" value="db_service_prod" />  
+		 <property name="password" value="O_XH(ng8f1_%" />
+		  <!-- 连接只读数据库时配置为true， 保证安全 -->  
+		 <property name="readOnly" value="false" />  
+		 <!-- 等待连接池分配连接的最大时长（毫秒），超过这个时长还没可用的连接则发生SQLException， 缺省:30秒 -->  
+		 <property name="connectionTimeout" value="60000" />  
+		 <!-- 一个连接idle状态的最大时长（毫秒），超时则被释放（retired），缺省:10分钟 -->  
+		 <property name="idleTimeout" value="600000" />  
+		 <!-- 一个连接的生命时长（毫秒），超时而且没被使用则被释放（retired），缺省:30分钟，建议设置比数据库超时时长少30秒，参考MySQL wait_timeout参数（show variables like '%timeout%';） -->  
+		 <property name="maxLifetime" value="1800000" />  
+		 <!-- 连接池中允许的最大连接数。缺省值：10；推荐的公式：((core_count * 2) + effective_spindle_count) -->  
+		 <property name="maximumPoolSize" value="20" />
+		 <property name="validationTimeout" value="3000"/>
+	</bean>
+	
+	<bean id="dataSourceHikari_mtcplat_auth" class="com.zaxxer.hikari.HikariDataSource" destroy-method="shutdown">
+		 <property name="jdbcUrl" value="jdbc:mysql://rm-uf64ks9egr7kks9iy.mysql.rds.aliyuncs.com:3306/mtcplat-auth?characterEncoding=utf-8&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=Asia/Shanghai" />
+		 <property name="username" value="db_service_prod" />  
+		 <property name="password" value="O_XH(ng8f1_%" />
+		  <!-- 连接只读数据库时配置为true， 保证安全 -->  
+		 <property name="readOnly" value="false" />  
+		 <!-- 等待连接池分配连接的最大时长（毫秒），超过这个时长还没可用的连接则发生SQLException， 缺省:30秒 -->  
+		 <property name="connectionTimeout" value="60000" />  
+		 <!-- 一个连接idle状态的最大时长（毫秒），超时则被释放（retired），缺省:10分钟 -->  
+		 <property name="idleTimeout" value="600000" />  
+		 <!-- 一个连接的生命时长（毫秒），超时而且没被使用则被释放（retired），缺省:30分钟，建议设置比数据库超时时长少30秒，参考MySQL wait_timeout参数（show variables like '%timeout%';） -->  
+		 <property name="maxLifetime" value="1800000" />  
+		 <!-- 连接池中允许的最大连接数。缺省值：10；推荐的公式：((core_count * 2) + effective_spindle_count) -->  
+		 <property name="maximumPoolSize" value="20" />
+		 <property name="validationTimeout" value="3000"/>
+	</bean>
+	
+	
+	<bean id="dataSourceHikari_mtcplat_business" class="com.zaxxer.hikari.HikariDataSource" destroy-method="shutdown">
+		 <property name="jdbcUrl" value="jdbc:mysql://rm-uf64ks9egr7kks9iy.mysql.rds.aliyuncs.com:3306/mtcplat-business?useSSL=false&amp;characterEncoding=utf-8&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=Asia/Shanghai" />
+		 <property name="username" value="db_service_prod" />  
+		 <property name="password" value="O_XH(ng8f1_%" />
+		  <!-- 连接只读数据库时配置为true， 保证安全 -->  
+		 <property name="readOnly" value="false" />  
+		 <!-- 等待连接池分配连接的最大时长（毫秒），超过这个时长还没可用的连接则发生SQLException， 缺省:30秒 -->  
+		 <property name="connectionTimeout" value="60000" />  
+		 <!-- 一个连接idle状态的最大时长（毫秒），超时则被释放（retired），缺省:10分钟 -->  
+		 <property name="idleTimeout" value="600000" />  
+		 <!-- 一个连接的生命时长（毫秒），超时而且没被使用则被释放（retired），缺省:30分钟，建议设置比数据库超时时长少30秒，参考MySQL wait_timeout参数（show variables like '%timeout%';） -->  
+		 <property name="maxLifetime" value="1800000" />  
+		 <!-- 连接池中允许的最大连接数。缺省值：10；推荐的公式：((core_count * 2) + effective_spindle_count) -->  
+		 <property name="maximumPoolSize" value="15" />  
+		 <property name="validationTimeout" value="8000"/>
+	</bean>
+	
+	<!-- 测试环境  -->
+	<bean id="dataSourceHikari_information_test" class="com.zaxxer.hikari.HikariDataSource" destroy-method="shutdown">
+		 <property name="jdbcUrl" value="jdbc:mysql://rm-uf6znj3x45u4no3sp.mysql.rds.aliyuncs.com:3306/information_schema?characterEncoding=utf-8&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=Asia/Shanghai" />
+		 <property name="username" value="db_service_test" />  
+		 <property name="password" value="Q&amp;kUJb=U84q_" />
+		  <!-- 连接只读数据库时配置为true， 保证安全 -->  
+		 <property name="readOnly" value="false" />  
+		 <!-- 等待连接池分配连接的最大时长（毫秒），超过这个时长还没可用的连接则发生SQLException， 缺省:30秒 -->  
+		 <property name="connectionTimeout" value="60000" />  
+		 <!-- 一个连接idle状态的最大时长（毫秒），超时则被释放（retired），缺省:10分钟 -->  
+		 <property name="idleTimeout" value="600000" />  
+		 <!-- 一个连接的生命时长（毫秒），超时而且没被使用则被释放（retired），缺省:30分钟，建议设置比数据库超时时长少30秒，参考MySQL wait_timeout参数（show variables like '%timeout%';） -->  
+		 <property name="maxLifetime" value="1800000" />  
+		 <!-- 连接池中允许的最大连接数。缺省值：10；推荐的公式：((core_count * 2) + effective_spindle_count) -->  
+		 <property name="maximumPoolSize" value="20" />  
+		 <property name="validationTimeout" value="8000"/>
+	</bean>
+	
+	<bean id="dataSourceHikari_mtcplat_auth_test" class="com.zaxxer.hikari.HikariDataSource" destroy-method="shutdown">
+		 <property name="jdbcUrl" value="jdbc:mysql://rm-uf6znj3x45u4no3sp.mysql.rds.aliyuncs.com:3306/mtcplat-auth?characterEncoding=utf-8&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=Asia/Shanghai" />
+		 <property name="username" value="db_service_test" />  
+		 <property name="password" value="Q&amp;kUJb=U84q_" />
+		  <!-- 连接只读数据库时配置为true， 保证安全 -->  
+		 <property name="readOnly" value="false" />  
+		 <!-- 等待连接池分配连接的最大时长（毫秒），超过这个时长还没可用的连接则发生SQLException， 缺省:30秒 -->  
+		 <property name="connectionTimeout" value="60000" />  
+		 <!-- 一个连接idle状态的最大时长（毫秒），超时则被释放（retired），缺省:10分钟 -->  
+		 <property name="idleTimeout" value="600000" />  
+		 <!-- 一个连接的生命时长（毫秒），超时而且没被使用则被释放（retired），缺省:30分钟，建议设置比数据库超时时长少30秒，参考MySQL wait_timeout参数（show variables like '%timeout%';） -->  
+		 <property name="maxLifetime" value="1800000" />  
+		 <!-- 连接池中允许的最大连接数。缺省值：10；推荐的公式：((core_count * 2) + effective_spindle_count) -->  
+		 <property name="maximumPoolSize" value="20" />  
+		 <property name="validationTimeout" value="8000"/>
+	</bean>
+	
+	
+	<bean id="dataSourceHikari_mtcplat_business_test" class="com.zaxxer.hikari.HikariDataSource" destroy-method="shutdown">
+		 <property name="jdbcUrl" value="jdbc:mysql://rm-uf6znj3x45u4no3sp.mysql.rds.aliyuncs.com:3306/mtcplat-business?useSSL=false&amp;characterEncoding=utf-8&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=Asia/Shanghai" />
+		 <property name="username" value="db_service_test" />  
+		 <property name="password" value="Q&amp;kUJb=U84q_" />
+		  <!-- 连接只读数据库时配置为true， 保证安全 -->  
+		 <property name="readOnly" value="false" />  
+		 <!-- 等待连接池分配连接的最大时长（毫秒），超过这个时长还没可用的连接则发生SQLException， 缺省:30秒 -->  
+		 <property name="connectionTimeout" value="60000" />  
+		 <!-- 一个连接idle状态的最大时长（毫秒），超时则被释放（retired），缺省:10分钟 -->  
+		 <property name="idleTimeout" value="600000" />  
+		 <!-- 一个连接的生命时长（毫秒），超时而且没被使用则被释放（retired），缺省:30分钟，建议设置比数据库超时时长少30秒，参考MySQL wait_timeout参数（show variables like '%timeout%';） -->  
+		 <property name="maxLifetime" value="1800000" />  
+		 <!-- 连接池中允许的最大连接数。缺省值：10；推荐的公式：((core_count * 2) + effective_spindle_count) -->  
+		 <property name="maximumPoolSize" value="15" />  
+		 <property name="validationTimeout" value="3000"/>
+	</bean>
+</beans>
