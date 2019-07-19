@@ -1,7 +1,5 @@
 package com.sx.db.util;
 
-import java.util.Map;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -10,7 +8,7 @@ import lombok.EqualsAndHashCode;
  * Description:
  *
  * @param <T>
- * @author renguoqing	
+ * @author rengq	
  * @version v0.0.1
  */
 @Data

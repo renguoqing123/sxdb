@@ -10,7 +10,7 @@ import lombok.Setter;
  * Title: Class 系统响应吗枚举类 Description: 此处定义所有的系统内容的错误码
  *
  *
- * @author llk
+ * @author rengq
  * @version v0.0.1
  */
 public enum SysRespConstants {
