@@ -132,6 +132,7 @@
   function searchTable(pageNum,pageSize){
 	  var db = $("#textDbSelect").val();
 	  var table = $("#textTableSelect").val();
+	  pageSize = $("#textNumSelect").val();
 	  if('' == db){
 		  alert("db不能为空");
 		  return;
