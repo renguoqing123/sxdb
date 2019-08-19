@@ -106,7 +106,7 @@
 	  $.get("/queryTableList/"+db+"",function(data,status){
 		  var optionstring="";  
 		  $.each(data,function(key,value){
-			  optionstring += "<option value=\"" + value + "\" ></option>";  
+			  optionstring += "<option value=\"" + key + "\" >"+value+"</option>";  
 		  })
 		  $("#textTableSelect").val("");
 		  $("#dataListForSelect").html(optionstring); 

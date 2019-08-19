@@ -129,7 +129,7 @@ public class SxDbaController {
 	
 	//查询表
 	@RequestMapping(value = "/queryTableList/{db}", method = RequestMethod.GET)
-	public List<String> queryTableList(@PathVariable("db") String db) throws SQLException, IOException {
+	public Map<String, String> queryTableList(@PathVariable("db") String db) throws SQLException, IOException {
 //		Properties properties = PropertiesLoaderUtils.loadAllProperties(""+db+".properties");
 //		db = db.replaceAll("-", "_");
 		return getDB(db);
@@ -168,16 +168,16 @@ public class SxDbaController {
 		return data;
 	}
 	
-	private List<String> getDB(String db) {//查询表
-		List<String> data = new ArrayList<>();
+	private Map<String,String> getDB(String db) {//查询表
 		String dbSource="prod";
 		if(db.contains("test")) {dbSource="test";db=db.substring(0, db.indexOf("-test"));}
-		dbSource = (dbSource+"_ku_table_DB");
+		dbSource = (dbSource+"_ku_table_comment_DB");
 		try {
 			Class<SxDbInit> clazz = SxDbInit.class;
 			Field field = clazz.getDeclaredField(dbSource);
-			Map<String,List<String>> res = (Map<String,List<String>>)field.get(dbSource);
-			data=res.get(db);
+			Map<String,Map<String,String>> res = (Map<String,Map<String,String>>)field.get(dbSource);
+			Map<String,String> mapRes = res.get(db);
+			return mapRes;
 		} catch (NoSuchFieldException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -191,7 +191,7 @@ public class SxDbaController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return data;
+		return new LinkedHashMap<>(128);
 	}
 	
 	//查询DB
