@@ -43,6 +43,8 @@
 	   		   <td><input type="button" onclick="searchTable(1,10)" value="查询"></input></td>
 	   		   <td><input type="button" onclick="searchTable('-1',10)" value="升序"></input></td>
 	   		   <td><input type="button" onclick="searchTable('-2',10)" value="降序"></input></td>
+	   		   <td><input type="button" onclick="searchMoreTable(1,10)" value="多表查询"></input></td>
+	   		   <td><input type="button" onclick="searchExportTable()" value="导出"></input></td>
 	   		   <td>
 	   		   	 排序：<input class="changeDiv" type="text" id="textSortSelect" list="dataSortListForSelect" size="10"/>
 	                <datalist id="dataSortListForSelect">
@@ -50,7 +52,13 @@
 	   		   </td>
 	   		</tr>
 	   		<tr>
-	   			<td colspan="6"><textarea id="condition" rows="10" cols="100"></textarea></td>
+	   			<td colspan="8"><textarea id="condition" rows="10" cols="117" 
+	   			placeholder="【多表查询】规则如下：
+	1、条件查询不能使用*代替多有字段名；
+	2、点击【多表查询】查询按钮前，需选中DB数据源,表名任意；
+	3、sql语句中的表名必须在当前DB数据源下才能执行；
+实例：select a.order_no,a.user_id,b.img_url from t_order a left join t_order_image b on a.order_no=b.order_no
+	   			"></textarea></td>
 	   		</tr>
 	   	</thead>
   	</table>
@@ -129,6 +137,44 @@
 	  });
   }
   
+  function searchMoreTable(pageNum,pageSize){
+	  var condition = $("#condition").val();
+	  var db = $("#textDbSelect").val();
+	  var table = $("#textTableSelect").val();
+	  if(''==condition){
+		  alert("请输入sql语句");
+		  return;
+	  }
+	  if('' == db){
+		  alert("请选择表对象的数据源DB");
+		  return;
+	  }
+	  if('' == table){
+		  alert("表任意选择");
+		  return;
+	  }
+	  condition = condition.toUpperCase();
+	  var select_index = condition.lastIndexOf("SELECT");
+	  var from_index = condition.indexOf("FROM");
+	  var param = condition.substring(select_index,from_index);
+	  param = param.split("SELECT")[1].trim();
+	  var data = param.split(",");
+	  var paramValue="";
+	  var optionSortString="";  
+	  $.each(data,function(key,value){
+		  if(null!=value){
+			  paramValue += "<th id='drawing' ondblclick='shuangji("+key+")' oncontextmenu=''>"+value+"</th>";
+			  optionSortString += "<option value=\"" + value + "\" ></option>";
+		  }
+	  })
+	  $("#paramValue").html(paramValue);
+	  $("#dataSortListForSelect").html(optionSortString); 
+	  var db = $("#textDbSelect").val();
+	  var table = $("#textTableSelect").val();
+	  pageSize = $("#textNumSelect").val();
+	  handleTable(db,table,pageNum,pageSize,condition);
+  }
+  
   function searchTable(pageNum,pageSize){
 	  var db = $("#textDbSelect").val();
 	  var table = $("#textTableSelect").val();
@@ -155,9 +201,12 @@
 		  $("#paramValue").html(paramValue);
 		  $("#dataSortListForSelect").html(optionSortString); 
 	  });
-	  
-	  var param = "/queryTable/"+db+"/"+table+"";
 	  var condition = $("#condition").val();
+	  handleTable(db,table,pageNum,pageSize,condition);
+  }
+  
+  function handleTable(db,table,pageNum,pageSize,condition){
+	  var param = "/queryTable/"+db+"/"+table+"";
 	  var sort = $('#textSortSelect').val();
 	  if('' != condition){
 		  param = param + "?condition="+condition+"&pageNum="+pageNum+"&pageSize="+pageSize;
@@ -215,7 +264,7 @@
 	  var cell = tb.cells[key];
 	  cell.style.display = 'none';
 	  console.log(tb);
-	  var row=document.getElementById ("paramData").rows;
+	  var row=document.getElementById("paramData").rows;
 	  console.log(row);
 	  for(var i = 0, len = row.length; i < len; i++){
 	       var cell1 = row[i].cells[key];
@@ -258,7 +307,26 @@
 	  }
   }
   
-  
+  function searchExportTable(){
+	  var db = $("#textDbSelect").val();
+	  var condition = $("#condition").val();
+	  condition = condition.toUpperCase();
+	  var table = $("#textTableSelect").val();
+	  var param = "/exportTable/"+db+"/"+table+"";
+	  var sort = $('#textSortSelect').val();
+	  if('' != condition){
+		  param = param + "?condition="+condition;
+	  }
+	  if('' != sort){
+		  param = param + "&sort="+sort
+	  }
+	  if(confirm("您将导出当前页面查询出的所有数据，确定吗？")){
+		  window.location.href=param;
+		  alert("OK");
+	  }else{
+		  alert("NO");
+	  }
+  }
   
   
   //alert(GetQueryString("phone"));
