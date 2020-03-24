@@ -78,8 +78,9 @@
    			<td><input type="button" value="尾页" onclick="page(4)"/></td>
    			<td><input id="tz" type="text" value=""/></td>
    			<td><input type="button" value="跳转" onclick="page(5)"/></td>
-   			<td>总页数:<span id="total"></span></td>
-   			<td>条数:<input class="changeDiv" size="2" type="text" value="10" id="textNumSelect" list="dataNumListForSelect" />
+   			<td>总页数:<span id="totalNum"></span></td>
+   			<td>总条数:<span id="total"></span></td>
+   			<td>每页显示条数:<input class="changeDiv" size="2" type="text" value="10" id="textNumSelect" list="dataNumListForSelect" />
 	                <datalist id="dataNumListForSelect">
 	                	<option>10</option>
 	                	<option>20</option>
@@ -233,6 +234,13 @@
 		  var pageSize = d.pageSize;
 		  var total = d.total;
 		  $("#total").html(total);
+		  var totalNo = parseInt(total);
+		  var t = totalNo/pageSize;
+		  t = Math.ceil(t);
+		  if(t<0){
+			  t=t+1;
+		  }
+		  $("#totalNum").html(t);
 		  var pdata="";
 		  var dd = d.data;
 		  $.each(dd,function(key,map){
@@ -277,6 +285,11 @@
   }
   
   function page(num){
+	  var condition = $("#condition").val();
+	  var bool=false;
+	  if(condition.indexOf("SELECT") != -1 || condition.indexOf("select") != -1){
+		  bool=true;
+	  } 
 	  var pageNum = $("#pageNum").text();
 	  var pageNo = parseInt(pageNum);
 	  var total = $("#total").text();
@@ -284,10 +297,18 @@
 	  var textNumSelect = $("#textNumSelect").val();
 	  var textNum = parseInt(textNumSelect);
 	  if(num=='1'){
-		 searchTable(1,textNum);
+		 if(bool){
+			 searchMoreTable(1,textNum);
+		 }else{
+			 searchTable(1,textNum);
+		 }
 	  }else if(num=='2'){
 		 if(pageNo>0){
-			searchTable(pageNo-1,textNum);
+			 if(bool){
+				 searchMoreTable(pageNo-1,textNum);
+			 }else{
+				 searchTable(pageNo-1,textNum);
+			 }
 		 } 
 	  }else if(num=='3'){
 		 var t = totalNo/textNum;
@@ -296,14 +317,26 @@
 		 if(t<=p){
 			 p=t;
 		 }
-		 searchTable(p,textNum);
+		 if(bool){
+			 searchMoreTable(p,textNum);
+		 }else{
+			 searchTable(p,textNum);
+		 }
 	  }else if(num=='4'){
 		 var t = totalNo/textNum;
 		 t = Math.ceil(t);
-		 searchTable(t,textNum);
+		 if(bool){
+			 searchMoreTable(t,textNum);
+		 }else{
+			 searchTable(t,textNum);
+		 }
 	  }else if(num=='5'){
 		 var tz = $("#tz").val();
-		 searchTable(tz,textNum);
+		 if(bool){
+			 searchMoreTable(tz,textNum);
+		 }else{
+			 searchTable(tz,textNum);
+		 }
 	  }
   }
   

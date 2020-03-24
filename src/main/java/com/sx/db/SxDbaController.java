@@ -86,8 +86,8 @@ public class SxDbaController {
 				sql = sql + condition;
 				sqlConunt = sqlConunt + condition;
 			}else if(!ObjectUtils.isEmpty(condition)) {
-				sql = sql + "WHERE " +condition;
-				sqlConunt = sqlConunt + "WHERE " +condition;
+				sql = sql + condition;
+				sqlConunt = sqlConunt + condition;
 			}
 			//总记录数
 			rs= statement.executeQuery(sqlConunt);
@@ -98,11 +98,11 @@ public class SxDbaController {
 			if(pageNum==-1) {//升序
 				pageNum=1;
 				if(null == sort) {throw new RuntimeException("sort value is null");}
-				sql = sql+" order by "+sort+" ASC";
+				sql = sql+" ORDER BY "+sort+" ASC";
 			}else if(pageNum==-2) {//降序
 				pageNum=1;
 				if(null == sort) {throw new RuntimeException("sort value is null");}
-				sql = sql+" order by "+sort+" DESC";;
+				sql = sql+" ORDER BY "+sort+" DESC";;
 			}
 			if(pageNum==0) {pageNum=1;}
 			int pageNo = ((pageNum-1)*pageSize);
@@ -180,8 +180,8 @@ public class SxDbaController {
 				sql = sql + condition;
 				sqlConunt = sqlConunt + condition;
 			}else if(!ObjectUtils.isEmpty(condition)) {
-				sql = sql + "WHERE " +condition;
-				sqlConunt = sqlConunt + "WHERE " +condition;
+				sql = sql + condition;
+				sqlConunt = sqlConunt + condition;
 			}
 			//总记录数
 			rs= statement.executeQuery(sqlConunt);
