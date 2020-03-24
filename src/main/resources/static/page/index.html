@@ -78,7 +78,7 @@
    			<td><input type="button" value="尾页" onclick="page(4)"/></td>
    			<td><input id="tz" type="text" value=""/></td>
    			<td><input type="button" value="跳转" onclick="page(5)"/></td>
-   			<td>总页数:<span id="totalNum"></span></td>
+   			<td>总页数:<span id="totalPageNum"></span></td>
    			<td>总条数:<span id="total"></span></td>
    			<td>每页显示条数:<input class="changeDiv" size="2" type="text" value="10" id="textNumSelect" list="dataNumListForSelect" />
 	                <datalist id="dataNumListForSelect">
@@ -240,7 +240,7 @@
 		  if(t<0){
 			  t=t+1;
 		  }
-		  $("#totalNum").html(t);
+		  $("#totalPageNum").html(t);
 		  var pdata="";
 		  var dd = d.data;
 		  $.each(dd,function(key,map){
