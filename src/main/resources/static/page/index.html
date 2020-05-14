@@ -32,7 +32,7 @@
 	   		<tr>
 	   		   <td>
 	   		   	 DB：<input class="changeDiv" type="text" id="textDbSelect" list="dbListForSelect" onchange="gradeChange()"/>
-	                <datalist id="dbListForSelect">
+	                <datalist id="dbListForSelect" onchange="abc()">
 	                 </datalist>
 	   		   </td>
 	   		   <td>
@@ -105,13 +105,19 @@
   $.get("/queryDbList",function(data,status){
 	  var optionstring="";
 	  $.each(data,function(key,value){
-		  optionstring += "<option value=\"" + value + "\" ></option>";  
+		  optionstring += "<option data-id=\"" + key + "\"  value=\"" + value + "\" ></option>";  
 	  })
 	  $("#dbListForSelect").html(optionstring); 
   });
   
   function gradeChange(){
 	  var db = $("#textDbSelect").val();
+	  /* var id;
+	  var s = $("#dbListForSelect option").each(function(){
+		   if( $(this).val() == db){
+		        id=$(this).attr("data-id");
+		    }
+		}); */
 	  $.get("/queryTableList/"+db+"",function(data,status){
 		  var optionstring="";  
 		  $.each(data,function(key,value){
